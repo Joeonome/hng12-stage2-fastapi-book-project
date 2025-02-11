@@ -50,7 +50,7 @@ fastapi-book-project/
 
 ```bash
 git clone https://github.com/Joeonome/hng12-stage2-fastapi-book-project.git
-cd fastapi-book-project
+cd hng12-stage2-fastapi-book-project
 ```
 
 2. Create a virtual environment:
