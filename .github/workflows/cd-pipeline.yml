@@ -5,7 +5,7 @@ on:
     - main  # Triggers deployment when code is pushed to main
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
@@ -16,13 +16,15 @@ jobs:
         SERVER_USER: ${{ secrets.SERVER_USER }}
         SERVER_IP: ${{ secrets.SERVER_IP }}
       run: |
-        printf "%s\n" "$SSH_KEY" > private_key.pem
+        echo "$SSH_KEY" > private_key.pem
         chmod 600 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
           cd  hng12-stage2-fastapi-book-project
           git pull origin main
           source my_project/bin/activate
           pip install -r requirements.txt
+          docker-compose down       # Stop the existing containers
+          docker-compose up --build -d  # Rebuild and restart services
           sudo systemctl restart fastapi
           sudo systemctl restart nginx
           uvicorn main:app --host 0.0.0.0 --port 8000 --reload
