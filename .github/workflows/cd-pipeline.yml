@@ -12,13 +12,13 @@ jobs:
 
     - name: Set up SSH and Deploy
       env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_KEY: ${{ secrets.SSH_KEY }}
         SERVER_USER: ${{ secrets.SERVER_USER }}
         SERVER_IP: ${{ secrets.SERVER_IP }}
       run: |
-        echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+        echo "$SSH_KEY" > private_key && chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i private_key $SERVER_USER@$SERVER_IP << 'EOF'
-          cd /path/to/your/project  # Change to your project directory
+          cd hng12-stage2-fastapi-book-project  # Change to your project directory
           git pull origin main      # Pull the latest changes
           docker-compose down       # Stop the existing containers
           docker-compose up --build -d  # Rebuild and restart services
