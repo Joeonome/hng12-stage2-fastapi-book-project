@@ -16,10 +16,14 @@ jobs:
         SERVER_USER: ${{ secrets.SERVER_USER }}
         SERVER_IP: ${{ secrets.SERVER_IP }}
       run: |
-        echo "$SSH_KEY" > private_key && chmod 600 private_key
-        ssh -o StrictHostKeyChecking=no -i private_key $SERVER_USER@$SERVER_IP << 'EOF'
-          cd hng12-stage2-fastapi-book-project  # Change to your project directory
-          git pull origin main      # Pull the latest changes
-          docker-compose down       # Stop the existing containers
-          docker-compose up --build -d  # Rebuild and restart services
+        echo "$SSH_KEY" > private_key.ppk
+        chmod 600 private_key.ppk
+        ssh -o StrictHostKeyChecking=no -i private_key.ppk $SERVER_USER@$SERVER_IP << 'EOF'
+          cd  hng12-stage2-fastapi-book-project
+          git pull origin main
+          source my_project/bin/activate
+          pip install -r requirements.txt
+          sudo systemctl restart fastapi
+          sudo systemctl restart nginx
+          uvicorn main:app --host 0.0.0.0 --port 8000 --reload
         EOF
