@@ -20,7 +20,8 @@ jobs:
         chmod 600 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
           cd  hng12-stage2-fastapi-book-project
-          git pull origin main
+          git fetch origin main
+          git reset --hard origin/main
           
           # Stop and remove old container (if running)
           sudo docker stop fastapi-app || true
