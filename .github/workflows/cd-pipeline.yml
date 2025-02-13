@@ -21,10 +21,15 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
           cd  hng12-stage2-fastapi-book-project
           git pull origin main
-          source my_project/bin/activate
-          pip install -r requirements.txt
-          docker-compose down       # Stop the existing containers
-          docker-compose up --build -d  # Rebuild and restart services
-          sudo systemctl restart fastapi
+          
+          # Stop and remove old container (if running)
+          sudo docker stop fastapi-app || true
+          sudo docker rm fastapi-app || true
+
+          # Build and run the new container
+          sudo docker build -t fastapi-app .
+          sudo docker run -d -p 8000:8000 --name fastapi-app fastapi-app
+
+          # Restart Nginx to apply any config changes
           sudo systemctl restart nginx
         EOF
