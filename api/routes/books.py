@@ -49,18 +49,14 @@ async def get_books() -> OrderedDict[int, Book]:
 
 
 @router.get("/{book_id}", response_model=Book, status_code=status.HTTP_200_OK)
-async def get_book(book_id: int) -> Book:
+async def get_book(book_id: int):
     book = db.get_book(book_id)
-    if book:
-        return JSONResponse(
-            status_code=status.HTTP_200_OK, 
-            content=book.dict()
-        )
-    else:
+    if not book:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND, 
-            content={"details": "NOT FOUND"}
+            content={"detail": "Book not found"}
         )
+    return book
         
 
 @router.put("/{book_id}", response_model=Book, status_code=status.HTTP_200_OK)
