@@ -17,7 +17,7 @@ jobs:
         SERVER_IP: ${{ secrets.SERVER_IP }}
       run: |
         echo "$SSH_KEY" > private_key.pem
-        chmod 600 private_key.pem
+        chmod 400 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP << 'EOF'
           cd  hng12-stage2-fastapi-book-project
           git fetch origin main
