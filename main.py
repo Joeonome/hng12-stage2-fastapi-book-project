@@ -25,4 +25,4 @@ async def health_check():
 @app.get("/stage2")
 async def stage2():
     """Checks if server is active."""
-    return {"message": "active"}
+    return {"status": "adddgdgd"}
