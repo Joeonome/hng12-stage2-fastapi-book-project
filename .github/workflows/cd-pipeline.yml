@@ -24,8 +24,9 @@ jobs:
           git reset --hard origin/main
           
           # Stop and remove old container (if running)
-          sudo docker stop fastapi-app || true
-          sudo docker rm fastapi-app || true
+          sudo docker stop wonderful_murdock || true
+          sudo docker rm wonderful_murdock || true
+
 
           # Build and run the new container
           sudo docker build -t fastapi-app .
